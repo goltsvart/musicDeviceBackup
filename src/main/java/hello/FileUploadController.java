@@ -1,6 +1,8 @@
 package hello;
 
 import hello.data.domain.Track;
+import hello.data.domain.User;
+import hello.service.UserService;
 import hello.storage.StorageFileNotFoundException;
 import hello.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 //@RequestMapping(value = "/")
 public class FileUploadController {
+
+    @Autowired
+    private UserService userService;
 
     private final StorageService storageService;
 
@@ -65,7 +69,8 @@ public class FileUploadController {
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
         //to read this file and save into database for particular user
-
+        User u = userService.findByUsername(userName);
+        List<Track> tracks = new ArrayList<Track>();
         try {
 
             File fXmlFile = new File("upload-dir/" + file.getOriginalFilename());
@@ -118,7 +123,6 @@ public class FileUploadController {
                             }
                         }
                     }
-
                     String trackId = "";
                     String name = "";
                     String artist = "";
@@ -137,13 +141,25 @@ public class FileUploadController {
                       if(trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()
                               && artist != null && !artist.isEmpty() && album != null && !album.isEmpty()
                               && year != null && !year.isEmpty() && genre != null && !genre.isEmpty()) {
-                          Track t = new Track(trackId, name, artist, album, year, genre);
-                       //   System.out.println("track" + t.toString());
+                          Long tId = Long.valueOf(trackId).longValue();
+                          Track t = new Track(tId, library_persistance_id, name, artist, album, year, genre);
+                          System.out.println("track size" + t.toString());
+                          tracks.add(t);
+                          System.out.println("track size" + tracks.size());
+                          userService.createLibrary(u, tracks);
                       }
                 }
             }
+            System.out.println(tracks.size());
+            userService.createLibrary(u, tracks);
             System.out.println("Library Persistent ID: " + library_persistance_id);
             System.out.println(userName);
+            //attach library persistance id to user
+
+            userService.applyPersistanceId(u, library_persistance_id);
+            //save tracks for that user
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
