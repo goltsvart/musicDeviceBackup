@@ -8,8 +8,9 @@
 	<div>
 		<form method="POST" enctype="multipart/form-data" action="/uploadForm">
 			<table>
+				<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+				<input type="hidden" name="userName" th:value="${#httpServletRequest.remoteUser}"/>
 				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
 			</table>
 		</form>
