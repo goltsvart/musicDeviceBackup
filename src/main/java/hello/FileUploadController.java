@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
-//@RequestMapping(value = "/")
 public class FileUploadController {
 
     @Autowired

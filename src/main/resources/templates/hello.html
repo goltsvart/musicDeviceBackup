@@ -8,6 +8,9 @@
 <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 
 <p>Click <a th:href="@{/uploadForm}">here</a> to upload file.</p>
+<!--<p>Click <a th:href="@{'/tracks/' + ${#httpServletRequest.remoteUser}}">here</a> to see playlist.</p>-->
+<p>Click <a th:href="@{/tracks(username=${#httpServletRequest.remoteUser})}">here</a> to see playlist.</p>
+
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>

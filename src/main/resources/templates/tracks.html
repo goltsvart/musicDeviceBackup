@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Hello World!</title>
+</head>
+<body>
+<table>
+    <tr class="header">
+        <td>Name</td>
+        <td>Album</td>
+        <td>Year</td>
+        <td>Artist</td>
+        <td>Genre</td>
+    </tr>
+    <tr th:each="track : ${tracks}">
+        <td th:text="${track.name}">name</td>
+        <td th:text="${track.album}">album</td>
+        <td th:text="${track.year}">year</td>
+        <td th:text="${track.artist}">artist</td>
+        <td th:text="${track.genre}">genre</td>
+    </tr>
+</table>
+</body>
+</html>
