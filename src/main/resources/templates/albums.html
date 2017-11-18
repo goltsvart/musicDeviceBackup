@@ -7,18 +7,16 @@
 <body>
 <table>
     <tr class="header">
-        <td>Name</td>
         <td>Album</td>
         <td>Year</td>
         <td>Artist</td>
         <td>Genre</td>
     </tr>
-    <tr th:each="track : ${tracks}">
-        <td th:text="${track.name}">name</td>
-        <td th:text="${track.album}">album</td>
-        <td th:text="${track.year}">year</td>
-        <td th:text="${track.artist}">artist</td>
-        <td th:text="${track.genre}">genre</td>
+    <tr th:each="album : ${albums}">
+        <td th:text="${album.album}">album</td>
+        <td th:text="${album.year}">year</td>
+        <td th:text="${album.artist}">artist</td>
+        <td th:text="${album.genre}">genre</td>
     </tr>
 </table>
 </body>

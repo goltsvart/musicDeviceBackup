@@ -1,7 +1,7 @@
 package hello.controller;
 
 import hello.data.domain.User;
-import hello.service.TrackService;
+import hello.service.AlbumService;
 import hello.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +16,13 @@ public class AppController {
     @Autowired
     private UserService userService;
     @Autowired
-    private TrackService trackService;
+    private AlbumService albumService;
 
-    @RequestMapping(value = "/tracks", method = RequestMethod.GET)
+    @RequestMapping(value = "/albums", method = RequestMethod.GET)
     public String displayTracks(Model model, HttpServletRequest req) throws Exception {
         User u = userService.findByUsername(req.getRemoteUser());
-        model.addAttribute("tracks", trackService.displayAll(u));
-        return "tracks";
+        model.addAttribute("albums", albumService.displayAll(u));
+        return "albums";
     }
 
 }

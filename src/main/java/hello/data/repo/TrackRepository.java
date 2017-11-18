@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
-    Track findByTrackId(String trackId);
     List<Track> findAll();
+    Track findTrackByTrackId(Long trackId);
 }

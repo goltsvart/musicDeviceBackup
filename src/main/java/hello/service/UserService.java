@@ -1,7 +1,8 @@
 package hello.service;
 
-import hello.data.domain.Track;
+import hello.data.domain.Album;
 import hello.data.domain.User;
+import hello.data.repo.AlbumRepository;
 import hello.data.repo.TrackRepository;
 import hello.data.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,9 @@ public class UserService{
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AlbumRepository albumRepository;
+    @Autowired
     private TrackRepository trackRepository;
-
 
     @SuppressWarnings("unchecked")
     public void save(User user) {
@@ -34,10 +36,10 @@ public class UserService{
         user.setLibraryPersistanceId(persistanceId);
         userRepository.save(user);
     }
-    public void createLibrary(User user, List<Track> tracks) {
-        user.setTrack(tracks);
-        trackRepository.save(tracks);
+
+    public void createLibrary(User user, List<Album> albums) {
+        user.setAlbum(albums);
+        albumRepository.save(albums);
         userRepository.save(user);
     }
-
 }
