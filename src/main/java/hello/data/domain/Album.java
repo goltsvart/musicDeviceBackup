@@ -8,13 +8,15 @@ import java.util.List;
 @Data
 @Entity
 public class Album {
-    private @Id @GeneratedValue Long id;
+    private @Id
+    @GeneratedValue
+    Long id;
     private String libraryPersistanceId;
     private String artist;
     private String album;
     private String year;
     private String genre;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval=true)
     private List<Track> tracks;
 
     public Album() { }

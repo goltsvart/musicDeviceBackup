@@ -32,6 +32,7 @@ dependencies {
     compile('org.apache.commons:commons-lang3:3.6')
     compileOnly('org.projectlombok:lombok')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile('org.hibernate:hibernate-core:5.2.12.Final')
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 

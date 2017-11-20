@@ -2,20 +2,18 @@ package hello.data.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
 public class Track {
-    private @Id @GeneratedValue Long id;
-    private Long trackId;
+    private @Id @GeneratedValue Integer id;
+    private String trackId;
     private String name;
 
     public Track() { }
 
-    public Track(Long trackId, String name) {
+    public Track(String trackId, String name) {
         super();
         this.trackId = trackId;
         this.name= name;

@@ -9,10 +9,14 @@
     <tr class="header">
         <td>Track id</td>
         <td>Name</td>
+        <td></td>
+        <td></td>
     </tr>
     <tr th:each="track : ${tracks}">
         <td th:text="${track.trackId}">album</td>
         <td th:text="${track.name}">year</td>
+        <td><a th:href="@{'/tracks/edit/' + ${track.id}}">edit</a></td>
+        <td><a th:href="@{'/tracks/delete/' + ${track.id}}">delete</a></td>
     </tr>
 </table>
 </body>

@@ -48,8 +48,8 @@ public class AlbumService {
         return albumRepository.findAlbumByAlbum(name);
     }
 
-    public Track findTrackById(Long trackId){
-        return trackRepository.findTrackByTrackId(trackId);
+    public Track findTrackById(Integer id){
+        return trackRepository.findTrackById(id);
     }
 
     public void addTracksToAlbum(Album a, List<Track> tracks, Track t) {
@@ -60,5 +60,13 @@ public class AlbumService {
         }
         trackRepository.save(tracks);
         albumRepository.save(a);
+    }
+
+    public Track saveTrack(Track track){
+        return trackRepository.save(track);
+    }
+
+    public Integer deleteTrackById(Integer id){
+        return trackRepository.deleteTrackById(id);
     }
 }

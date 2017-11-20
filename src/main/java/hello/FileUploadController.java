@@ -147,7 +147,6 @@ public class FileUploadController {
                       if(trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()
                               && artist != null && !artist.isEmpty() && album != null && !album.isEmpty()
                               && year != null && !year.isEmpty() && genre != null && !genre.isEmpty()) {
-                          Long tId = Long.valueOf(trackId).longValue();
                           Album al = albumService.findAlbumByAlbumName(album);
                           if(al == null) {
                               Album anAlbum = new Album(library_persistance_id, artist, album, year, genre);
@@ -155,17 +154,15 @@ public class FileUploadController {
                               //save albums for that user
                               userService.createLibrary(u, albums);
                               List tracks = new ArrayList<Track>();
-                              Track t = new Track(tId,name);
+                              Track t = new Track(trackId,name);
                               tracks.add(t);
                               Album newAlbum = albumService.findAlbumByAlbumName(album);
                               albumService.addTracksToAlbum(newAlbum,tracks, null);
-                              System.out.println("IF "+ t.getTrackId());
                           }else{
                               List tracks = new ArrayList<Track>();
-                              Track t = new Track(tId,name);
+                              Track t = new Track(trackId,name);
                               tracks.add(t);
                               albumService.addTracksToAlbum(al,tracks, t);
-                              System.out.println("ELSE "+t.getTrackId());
                           }
                       }
                 }
