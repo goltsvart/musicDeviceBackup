@@ -31,6 +31,19 @@ public class AlbumService {
         return userT;
     }
 
+    public List<Track> displayAllTracks(User u, Album a) {
+        List<Track> t = trackRepository.findAll();
+        List<Track> newTracks = new ArrayList<Track>();
+        for(int j = 0; j < a.getTracks().size(); j++) {
+            for (int i = 0; i < t.size(); i++) {
+                if (a.getTracks().get(j).getName().equals(t.get(i).getName())) {
+                    newTracks.add(t.get(i));
+                }
+            }
+        }
+        return newTracks;
+    }
+
     public Album findAlbumByAlbumName(String name){
         return albumRepository.findAlbumByAlbum(name);
     }

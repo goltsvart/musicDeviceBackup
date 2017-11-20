@@ -11,12 +11,14 @@
         <td>Year</td>
         <td>Artist</td>
         <td>Genre</td>
+        <td>See tracks</td>
     </tr>
     <tr th:each="album : ${albums}">
         <td th:text="${album.album}">album</td>
         <td th:text="${album.year}">year</td>
         <td th:text="${album.artist}">artist</td>
         <td th:text="${album.genre}">genre</td>
+        <td><p><a th:href="@{/tracks(username=${#httpServletRequest.remoteUser}, albumName=${album.album})}">Tracks</a></p></td>
     </tr>
 </table>
 </body>
