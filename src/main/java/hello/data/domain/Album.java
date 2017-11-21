@@ -8,9 +8,7 @@ import java.util.List;
 @Data
 @Entity
 public class Album {
-    private @Id
-    @GeneratedValue
-    Long id;
+    private @Id @GeneratedValue Long id;
     private String libraryPersistanceId;
     private String artist;
     private String album;

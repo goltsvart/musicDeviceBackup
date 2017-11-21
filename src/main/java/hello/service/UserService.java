@@ -1,9 +1,12 @@
 package hello.service;
 
+import hello.data.TrackId;
 import hello.data.domain.Album;
+import hello.data.domain.Track;
+import hello.data.domain.TrackList;
 import hello.data.domain.User;
 import hello.data.repo.AlbumRepository;
-import hello.data.repo.TrackRepository;
+import hello.data.repo.TrackListRepository;
 import hello.data.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,9 @@ public class UserService{
     @Autowired
     private AlbumRepository albumRepository;
     @Autowired
-    private TrackRepository trackRepository;
+    private TrackListRepository trackListRepository;
+    @Autowired
+    private AlbumService albumService;
 
     @SuppressWarnings("unchecked")
     public void save(User user) {
@@ -41,5 +46,21 @@ public class UserService{
         user.setAlbum(albums);
         albumRepository.save(albums);
         userRepository.save(user);
+    }
+    public void createTrackList(User user, List<TrackList> lists) {
+        user.setTrackLists(lists);
+        trackListRepository.save(lists);
+        userRepository.save(user);
+    }
+    public void addTracksList(List<TrackId> tracksId) {
+        for(int k = 0; k < tracksId.size(); k++){
+            if(!tracksId.get(k).getPlaylistId().isEmpty()
+                    && !tracksId.get(k).getTrackId().isEmpty()) {
+                String tId = tracksId.get(k).getTrackId();
+                TrackList tl = trackListRepository.findTrackListByPlaylistId(tracksId.get(k).getPlaylistId());
+                Track t = albumService.findTrackByTrackId(tId);
+                albumService.saveTracksAndLists(tl, t);
+            }
+        }
     }
 }

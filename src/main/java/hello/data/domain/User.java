@@ -17,6 +17,8 @@ public class User {
     private Set<Role> roles;
     @OneToMany
     private List<Album> album;
+    @OneToMany
+    private List<TrackList> trackLists;
 
     public User(){}
 
@@ -25,11 +27,12 @@ public class User {
         this.username = username;
         this.password = password;
     }
-    public User(String username, String password, String libraryPersistanceId, List<Album> album) {
+    public User(String username, String password, String libraryPersistanceId, List<Album> album, List<TrackList> trackLists) {
         super();
         this.username = username;
         this.password = password;
         this.libraryPersistanceId = libraryPersistanceId;
         this.album = album;
+        this.trackLists = trackLists;
     }
 }

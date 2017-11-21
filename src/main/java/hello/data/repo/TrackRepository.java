@@ -10,7 +10,6 @@ public interface TrackRepository extends JpaRepository<Track, Integer> {
     List<Track> findAll();
     Track findTrackByTrackId(String trackId);
     Track findTrackById(Integer id);
-
     @Transactional
     Integer deleteTrackById(Integer id);
 }

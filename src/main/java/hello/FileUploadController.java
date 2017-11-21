@@ -1,7 +1,9 @@
 package hello;
 
+import hello.data.TrackId;
 import hello.data.domain.Album;
 import hello.data.domain.Track;
+import hello.data.domain.TrackList;
 import hello.data.domain.User;
 import hello.service.AlbumService;
 import hello.service.UserService;
@@ -21,6 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -77,12 +80,18 @@ public class FileUploadController {
         //to read this file and save into database for particular user
         User u = userService.findByUsername(userName);
         List albums = new ArrayList<Album>();
+        List trackLists = new ArrayList<TrackList>();
+        List tracksId = new ArrayList<TrackId>();
         String trackId = "";
         String name = "";
         String artist = "";
         String album = "";
         String year = "";
         String genre = "";
+
+        String playlistId ="";
+        String playlistName="";
+        String playlistTrack="";
         try {
 
             File fXmlFile = new File("upload-dir/" + file.getOriginalFilename());
@@ -99,11 +108,7 @@ public class FileUploadController {
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                //    System.out.println("NODE NAME:" + eElement.getNodeName());
-                //    System.out.println("TAG NAME:" + eElement.getTagName());
-                    // Iterate through sub-elements
 
-                    // A map to store key => values
                     Map<String, String> mss = new HashMap<String, String>();
 
                     NodeList childs = eElement.getChildNodes();
@@ -142,31 +147,66 @@ public class FileUploadController {
                     if (mss.containsKey("Album")) album = mss.get("Album");
                     if (mss.containsKey("Year")) year = mss.get("Year");
                     if (mss.containsKey("Genre")) genre = mss.get("Genre");
+
+                    if (mss.containsKey("Playlist ID")) playlistId = mss.get("Playlist ID");
+                    if (mss.containsKey("Name")) playlistName = mss.get("Name");
+                    if (mss.containsKey("Track ID")) playlistTrack = mss.get("Track ID");
+
                     if (mss.containsKey("Library Persistent ID")) library_persistance_id = mss.get("Library Persistent ID");
                     //store data into album object
                       if(trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()
                               && artist != null && !artist.isEmpty() && album != null && !album.isEmpty()
                               && year != null && !year.isEmpty() && genre != null && !genre.isEmpty()) {
-                          Album al = albumService.findAlbumByAlbumName(album);
-                          if(al == null) {
-                              Album anAlbum = new Album(library_persistance_id, artist, album, year, genre);
-                              albums.add(anAlbum);
-                              //save albums for that user
-                              userService.createLibrary(u, albums);
-                              List tracks = new ArrayList<Track>();
-                              Track t = new Track(trackId,name);
-                              tracks.add(t);
-                              Album newAlbum = albumService.findAlbumByAlbumName(album);
-                              albumService.addTracksToAlbum(newAlbum,tracks, null);
-                          }else{
-                              List tracks = new ArrayList<Track>();
-                              Track t = new Track(trackId,name);
-                              tracks.add(t);
-                              albumService.addTracksToAlbum(al,tracks, t);
-                          }
+                              Track uniqueTrack = albumService.findTrackByTrackId(trackId);
+                              Album al = albumService.findAlbumByAlbumName(album);
+                              if (al == null) {
+                                  Album anAlbum = new Album(library_persistance_id, artist, album, year, genre);
+                                  albums.add(anAlbum);
+                                  //save albums for that user
+                                  userService.createLibrary(u, albums);
+                                  if (uniqueTrack == null) {
+                                      List tracks = new ArrayList<Track>();
+                                      Track t = new Track(trackId, name);
+                                      tracks.add(t);
+                                      Album newAlbum = albumService.findAlbumByAlbumName(album);
+                                      albumService.addTracksToAlbum(newAlbum, tracks, null);
+                                  }else{
+                                      TrackList trackL = albumService.findTrackListByPlayListId(playlistId);
+                                      if(trackL == null){
+                                          TrackList tl = new TrackList(playlistId, playlistName);
+                                          trackLists.add(tl);
+                                          userService.createTrackList(u, trackLists);
+                                          TrackId t = new TrackId(trackId, playlistId);
+                                          tracksId.add(t);
+                                      }else{
+                                          TrackId t = new TrackId(trackId, playlistId);
+                                          tracksId.add(t);
+                                      }
+                                  }
+                               }else {
+                                  if (uniqueTrack == null) {
+                                      List tracks = new ArrayList<Track>();
+                                      Track t = new Track(trackId, name);
+                                      tracks.add(t);
+                                      albumService.addTracksToAlbum(al, tracks, t);
+                                  }else{
+                                      TrackList trackL = albumService.findTrackListByPlayListId(playlistId);
+                                      if(trackL == null){
+                                          TrackList tl = new TrackList(playlistId, playlistName);
+                                          trackLists.add(tl);
+                                          userService.createTrackList(u, trackLists);
+                                          TrackId t = new TrackId(trackId, playlistId);
+                                          tracksId.add(t);
+                                      }else{
+                                          TrackId t = new TrackId(trackId, playlistId);
+                                          tracksId.add(t);
+                                      }
+                                  }
+                              }
                       }
                 }
             }
+            userService.addTracksList(tracksId);
             //attach library persistance id to user
             userService.applyPersistanceId(u, library_persistance_id);
 
