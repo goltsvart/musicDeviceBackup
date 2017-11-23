@@ -13,7 +13,7 @@
     <tr th:each="trackList : ${trackLists}">
         <td th:text="${trackList.playlistId}">PlayList ID</td>
         <td th:text="${trackList.playlistName}">Name</td>
-        <td><p><a th:href="@{/listtracks(username=${#httpServletRequest.remoteUser}, playlistId=${trackList.playlistId})}">Tracks</a></p></td>
+        <td><p><a th:href="@{/listtracks(username=${#httpServletRequest.remoteUser}, playlistId=${trackList.id})}">Tracks</a></p></td>
     </tr>
 </table>
 </body>

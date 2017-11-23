@@ -47,7 +47,7 @@ public class AppController {
     @RequestMapping(value = "/listtracks", method = RequestMethod.GET)
     public String displayListTracks(Model model, HttpServletRequest req, @RequestParam("playlistId") String playlistId) throws Exception {
         User u = userService.findByUsername(req.getRemoteUser());
-        TrackList t = albumService.findTrackListByPlayListId(playlistId);
+        TrackList t = albumService.findTrackListById(Long.parseLong(playlistId));
         model.addAttribute("tracks", albumService.displayAllTracksForList(u, t));
         return "tracks";
     }
@@ -55,7 +55,7 @@ public class AppController {
     @RequestMapping(value= "/tracks/edit/{id}", method = RequestMethod.GET)
     public String editTrack(@PathVariable("id") Integer trackId, ModelMap model) {
         model.put("track", albumService.findTrackById(trackId));
-        return "edit";
+        return "hello";
     }
 
     @RequestMapping(value= "/tracks/delete/{id}", method = RequestMethod.GET)

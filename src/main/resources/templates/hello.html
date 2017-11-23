@@ -9,7 +9,7 @@
 
 <p>Click <a th:href="@{/uploadForm}">here</a> to upload file.</p>
 <p>Click <a th:href="@{/albums(username=${#httpServletRequest.remoteUser})}">here</a> to see albums.</p>
-<p>Click <a th:href="@{/lists(username=${#httpServletRequest.remoteUser})}">here</a> to see track lists.</p>
+<p>Click <a th:href="@{/lists(username=${#httpServletRequest.remoteUser})}">here</a> to see playlists.</p>
 
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>

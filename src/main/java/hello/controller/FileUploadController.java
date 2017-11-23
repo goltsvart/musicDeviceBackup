@@ -175,7 +175,6 @@ public class FileUploadController {
                             }
                         }
                     }else if (trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()) {
-                        System.out.println("2 else");
                         Track existingTrack = albumService.findTrack(trackId, library_persistance_id);
                         if(existingTrack == null){
                             Track t = new Track(trackId, name, library_persistance_id);

@@ -62,11 +62,13 @@ public class AlbumService {
     }
 
     public List<Track> displayAllTracksForList(User u, TrackList tl) {
-
+        String id = u.getLibraryPersistanceId();
         List<Track> newTracks = new ArrayList<Track>();
         for (int j = 0; j < tl.getTracks().size(); j++) {
-            Track track = tl.getTracks().get(j);
-            newTracks.add(track);
+            if(tl.getLibraryPersistanceId().equals(id)) {
+                Track track = tl.getTracks().get(j);
+                newTracks.add(track);
+            }
         }
         return newTracks;
     }
@@ -82,6 +84,11 @@ public class AlbumService {
     public Track findTrackById(Integer id){
         return trackRepository.findTrackById(id);
     }
+
+    public TrackList findTrackListById(Long id){
+        return trackListRepository.findTrackListById(id);
+    }
+
     public Track findTrackByTrackId(String id){
         return trackRepository.findTrackByTrackId(id);
     }

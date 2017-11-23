@@ -8,6 +8,7 @@
 
 <form class="form-horizontal" th:object="${track}" th:action="@{/track}" method="post">
     <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{trackId}"/>
     <p>Name: <input type="text" th:field="*{name}" /></p>
     <p><input type="submit" value="Submit" /></p>
 </form>

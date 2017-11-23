@@ -11,4 +11,5 @@ public interface TrackListRepository extends JpaRepository<TrackList, Long> {
     TrackList findTrackListByPlaylistId(String listId);
     TrackList findTrackListByPlaylistIdAndLibraryPersistanceId(String listId, String libraryId);
     TrackList findTrackListByPlaylistName(String name);
+    TrackList findTrackListById(Long id);
 }
