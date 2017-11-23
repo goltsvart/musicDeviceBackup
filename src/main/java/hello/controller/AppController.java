@@ -78,11 +78,12 @@ public class AppController {
     }
 
     @RequestMapping(value = "/move", method = RequestMethod.POST)
-    public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList,
-                         BindingResult result, ModelMap model) {
+    public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList ,
+                              @RequestParam(name = "oldtrackList") String oldtrackList, BindingResult result, ModelMap model) {
+        TrackList oldtl = albumService.findTrackListByPlaylistName(oldtrackList);
         TrackList tl = albumService.findTrackListByPlaylistName(trackList);
         Track t = albumService.findTrackById(track.getId());
-        albumService.moveTrackTo(t, tl);
+        albumService.moveTrackTo(oldtl, t, tl);
         return "hello";
     }
 }

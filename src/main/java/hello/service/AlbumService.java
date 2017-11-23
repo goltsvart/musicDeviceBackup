@@ -111,8 +111,12 @@ public class AlbumService {
         return trackRepository.save(track);
     }
 
-    public void moveTrackTo(Track track, TrackList trackList){
+    public void moveTrackTo(TrackList old, Track track, TrackList trackList){
         trackList.getTracks().add(track);
+        old.getTracks().remove(track);
+        track.getTrackLists().remove(old);
+        trackRepository.save(track);
+        trackListRepository.save(old);
         trackListRepository.save(trackList);
     }
     public Integer deleteTrackById(Integer id){
@@ -122,13 +126,17 @@ public class AlbumService {
     public void addTracksToList(TrackList tl, Track t){
         ArrayList<Track> tracks = new ArrayList<Track>();
         tracks.add(t);
-        ArrayList<TrackList> tracklists = new ArrayList<TrackList>();
-        tracks.add(t);
-        tracklists.add(tl);
         if(tl.getTracks() == null){
             tl.setTracks(tracks);
         }else{
             tl.getTracks().add(t);
+        }
+        ArrayList<TrackList> tracklists = new ArrayList<TrackList>();
+        tracklists.add(tl);
+        if(t.getTrackLists() == null){
+            t.setTrackLists(tracklists);
+        }else{
+            t.getTrackLists().add(tl);
         }
         trackRepository.save(t);
         trackListRepository.save(tl);
