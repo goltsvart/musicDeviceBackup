@@ -1,8 +1,6 @@
 package hello.service;
 
-import hello.data.TrackId;
 import hello.data.domain.Album;
-import hello.data.domain.Track;
 import hello.data.domain.TrackList;
 import hello.data.domain.User;
 import hello.data.repo.AlbumRepository;
@@ -51,16 +49,5 @@ public class UserService{
         user.setTrackLists(lists);
         trackListRepository.save(lists);
         userRepository.save(user);
-    }
-    public void addTracksList(List<TrackId> tracksId) {
-        for(int k = 0; k < tracksId.size(); k++){
-            if(!tracksId.get(k).getPlaylistId().isEmpty()
-                    && !tracksId.get(k).getTrackId().isEmpty()) {
-                String tId = tracksId.get(k).getTrackId();
-                TrackList tl = trackListRepository.findTrackListByPlaylistId(tracksId.get(k).getPlaylistId());
-                Track t = albumService.findTrackByTrackId(tId);
-                albumService.saveTracksAndLists(tl, t);
-            }
-        }
     }
 }

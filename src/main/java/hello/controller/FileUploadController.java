@@ -1,6 +1,5 @@
-package hello;
+package hello.controller;
 
-import hello.data.TrackId;
 import hello.data.domain.Album;
 import hello.data.domain.Track;
 import hello.data.domain.TrackList;
@@ -81,19 +80,15 @@ public class FileUploadController {
         User u = userService.findByUsername(userName);
         List albums = new ArrayList<Album>();
         List trackLists = new ArrayList<TrackList>();
-        List tracksId = new ArrayList<TrackId>();
         String trackId = "";
         String name = "";
         String artist = "";
         String album = "";
         String year = "";
         String genre = "";
-
-        String playlistId ="";
-        String playlistName="";
-        String playlistTrack="";
+        String playlistId = "";
+        boolean changed = false;
         try {
-
             File fXmlFile = new File("upload-dir/" + file.getOriginalFilename());
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -130,12 +125,13 @@ public class FileUploadController {
                                         // Should be integer or string
                                         String next_tag = next_element.getTagName();
                                         String next_content = next_element.getTextContent();
-
-                                            // store
+                                        // store
                                         mss.put(content, next_content);
-                                        // skip
-                                        k++;
-                                    }
+                                    // skip
+                                    k++;
+
+                                }
+
                                 }
                             }
                         }
@@ -147,66 +143,65 @@ public class FileUploadController {
                     if (mss.containsKey("Album")) album = mss.get("Album");
                     if (mss.containsKey("Year")) year = mss.get("Year");
                     if (mss.containsKey("Genre")) genre = mss.get("Genre");
-
+                    if (mss.containsKey("Genre")) genre = mss.get("Genre");
                     if (mss.containsKey("Playlist ID")) playlistId = mss.get("Playlist ID");
-                    if (mss.containsKey("Name")) playlistName = mss.get("Name");
-                    if (mss.containsKey("Track ID")) playlistTrack = mss.get("Track ID");
-
                     if (mss.containsKey("Library Persistent ID")) library_persistance_id = mss.get("Library Persistent ID");
+
                     //store data into album object
-                      if(trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()
-                              && artist != null && !artist.isEmpty() && album != null && !album.isEmpty()
-                              && year != null && !year.isEmpty() && genre != null && !genre.isEmpty()) {
-                              Track uniqueTrack = albumService.findTrackByTrackId(trackId);
-                              Album al = albumService.findAlbumByAlbumName(album);
-                              if (al == null) {
-                                  Album anAlbum = new Album(library_persistance_id, artist, album, year, genre);
-                                  albums.add(anAlbum);
-                                  //save albums for that user
-                                  userService.createLibrary(u, albums);
-                                  if (uniqueTrack == null) {
-                                      List tracks = new ArrayList<Track>();
-                                      Track t = new Track(trackId, name);
-                                      tracks.add(t);
-                                      Album newAlbum = albumService.findAlbumByAlbumName(album);
-                                      albumService.addTracksToAlbum(newAlbum, tracks, null);
-                                  }else{
-                                      TrackList trackL = albumService.findTrackListByPlayListId(playlistId);
-                                      if(trackL == null){
-                                          TrackList tl = new TrackList(playlistId, playlistName);
-                                          trackLists.add(tl);
-                                          userService.createTrackList(u, trackLists);
-                                          TrackId t = new TrackId(trackId, playlistId);
-                                          tracksId.add(t);
-                                      }else{
-                                          TrackId t = new TrackId(trackId, playlistId);
-                                          tracksId.add(t);
-                                      }
-                                  }
-                               }else {
-                                  if (uniqueTrack == null) {
-                                      List tracks = new ArrayList<Track>();
-                                      Track t = new Track(trackId, name);
-                                      tracks.add(t);
-                                      albumService.addTracksToAlbum(al, tracks, t);
-                                  }else{
-                                      TrackList trackL = albumService.findTrackListByPlayListId(playlistId);
-                                      if(trackL == null){
-                                          TrackList tl = new TrackList(playlistId, playlistName);
-                                          trackLists.add(tl);
-                                          userService.createTrackList(u, trackLists);
-                                          TrackId t = new TrackId(trackId, playlistId);
-                                          tracksId.add(t);
-                                      }else{
-                                          TrackId t = new TrackId(trackId, playlistId);
-                                          tracksId.add(t);
-                                      }
-                                  }
-                              }
-                      }
+                    if (trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()
+                            && artist != null && !artist.isEmpty() && album != null && !album.isEmpty()
+                            && year != null && !year.isEmpty() && genre != null && !genre.isEmpty()) {
+                        Album al = albumService.findAlbumByAlbumName(album);
+                        if (al == null) {
+                            Album anAlbum = new Album(library_persistance_id, artist, album, year, genre);
+                            albums.add(anAlbum);
+                            //save albums for that user
+                            userService.createLibrary(u, albums);
+                            List tracks = new ArrayList<Track>();
+                            Track existingTrack = albumService.findTrack(trackId, library_persistance_id);
+                            if(existingTrack == null){
+                                Track t = new Track(trackId, name, library_persistance_id);
+                                tracks.add(t);
+                            }
+                            Album newAlbum = albumService.findAlbumByAlbumName(album);
+                            albumService.addTracksToAlbum(newAlbum, tracks, null);
+                        } else {
+                            List tracks = new ArrayList<Track>();
+                            Track existingTrack = albumService.findTrack(trackId, library_persistance_id);
+                            if(existingTrack == null){
+                                Track t = new Track(trackId, name, library_persistance_id);
+                                tracks.add(t);
+                                albumService.addTracksToAlbum(al, tracks, t);
+                            }
+                        }
+                    }else if (trackId != null && !trackId.isEmpty() && name != null && !name.isEmpty()) {
+                        System.out.println("2 else");
+                        Track existingTrack = albumService.findTrack(trackId, library_persistance_id);
+                        if(existingTrack == null){
+                            Track t = new Track(trackId, name, library_persistance_id);
+                            albumService.saveTrack(t);
+                        }
+                    }
+                    if (playlistId != null && !playlistId.isEmpty()) {
+                        changed = true;
+                            TrackList trackL = albumService.findTrackList(playlistId, library_persistance_id);
+                            if (trackL == null) {
+                                TrackList tl = new TrackList(playlistId, name, library_persistance_id);
+                                trackLists.add(tl);
+                                userService.createTrackList(u, trackLists);
+                            } else {
+                                //
+                            }
+                    }
+                    if(trackId != null && !trackId.isEmpty() && changed == true){
+                        Track t = albumService.findTrack(trackId, library_persistance_id);
+                        TrackList tl = albumService.findTrackList(playlistId, library_persistance_id);
+                        if(t != null && tl != null){
+                            albumService.addTracksToList(tl, t);
+                        }
+                    }
                 }
             }
-            userService.addTracksList(tracksId);
             //attach library persistance id to user
             userService.applyPersistanceId(u, library_persistance_id);
 

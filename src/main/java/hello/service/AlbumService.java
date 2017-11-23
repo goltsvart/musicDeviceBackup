@@ -27,12 +27,25 @@ public class AlbumService {
         List<Album> userT = new ArrayList<Album>();
         for (int i = 0; i < t.size(); i++) {
             if (!u.getLibraryPersistanceId().equals(t.get(i).getLibraryPersistanceId())) {
-                return null;
+               // return null;
             } else {
                 userT.add(t.get(i));
             }
         }
         return userT;
+    }
+
+    public List<TrackList> displayAllLists(User u) {
+        List<TrackList> t = trackListRepository.findAll();
+        List<TrackList> newLists = new ArrayList<TrackList>();
+        for (int j = 0; j < u.getTrackLists().size(); j++) {
+            for(int i = 0; i < t.size(); i++) {
+                if (u.getTrackLists().get(j).equals(t.get(i))) {
+                    newLists.add(t.get(i));
+                }
+            }
+        }
+        return newLists;
     }
 
     public List<Track> displayAllTracks(User u, Album a) {
@@ -48,9 +61,20 @@ public class AlbumService {
         return newTracks;
     }
 
+    public List<Track> displayAllTracksForList(User u, TrackList tl) {
+
+        List<Track> newTracks = new ArrayList<Track>();
+        for (int j = 0; j < tl.getTracks().size(); j++) {
+            Track track = tl.getTracks().get(j);
+            newTracks.add(track);
+        }
+        return newTracks;
+    }
+
     public Album findAlbumByAlbumName(String name){
         return albumRepository.findAlbumByAlbum(name);
     }
+
     public TrackList findTrackListByPlayListId(String playListId){
         return trackListRepository.findTrackListByPlaylistId(playListId);
     }
@@ -62,6 +86,17 @@ public class AlbumService {
         return trackRepository.findTrackByTrackId(id);
     }
 
+    public Track findTrack(String trackId, String libraryPersistnceId){
+        return trackRepository.findTrackByTrackIdAndLibraryPersistanceId(trackId, libraryPersistnceId);
+    }
+    public TrackList findTrackList(String listId, String libraryPersistnceId){
+        return trackListRepository.findTrackListByPlaylistIdAndLibraryPersistanceId(listId, libraryPersistnceId);
+    }
+
+
+    public TrackList findTrackListByPlaylistName(String name){
+        return trackListRepository.findTrackListByPlaylistName(name);
+    }
     public void addTracksToAlbum(Album a, List<Track> tracks, Track t) {
         if(t == null){
             a.setTracks(tracks);
@@ -76,18 +111,26 @@ public class AlbumService {
         return trackRepository.save(track);
     }
 
+    public void moveTrackTo(Track track, TrackList trackList){
+        trackList.getTracks().add(track);
+        trackListRepository.save(trackList);
+    }
     public Integer deleteTrackById(Integer id){
         return trackRepository.deleteTrackById(id);
     }
 
-    public void saveTracksAndLists(TrackList tl, Track t){
-        List<TrackList> trackList = new ArrayList<TrackList>();
-        List<Track> tracks = new ArrayList<Track>();
-        trackList.add(tl);
+    public void addTracksToList(TrackList tl, Track t){
+        ArrayList<Track> tracks = new ArrayList<Track>();
         tracks.add(t);
-        t.setTrackLists(trackList);
-        tl.setTracks(tracks);
-        trackListRepository.save(tl);
+        ArrayList<TrackList> tracklists = new ArrayList<TrackList>();
+        tracks.add(t);
+        tracklists.add(tl);
+        if(tl.getTracks() == null){
+            tl.setTracks(tracks);
+        }else{
+            tl.getTracks().add(t);
+        }
         trackRepository.save(t);
+        trackListRepository.save(tl);
     }
 }

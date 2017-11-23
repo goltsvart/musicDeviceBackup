@@ -2,6 +2,7 @@ package hello.controller;
 
 import hello.data.domain.Album;
 import hello.data.domain.Track;
+import hello.data.domain.TrackList;
 import hello.data.domain.User;
 import hello.service.AlbumService;
 import hello.service.UserService;
@@ -28,11 +29,26 @@ public class AppController {
         return "albums";
     }
 
+    @RequestMapping(value = "/lists", method = RequestMethod.GET)
+    public String displayLists(Model model, HttpServletRequest req) throws Exception {
+        User u = userService.findByUsername(req.getRemoteUser());
+        model.addAttribute("trackLists", albumService.displayAllLists(u));
+        return "lists";
+    }
+
     @RequestMapping(value = "/tracks", method = RequestMethod.GET)
     public String displayTracks(Model model, HttpServletRequest req, @RequestParam("albumName") String albumName) throws Exception {
         User u = userService.findByUsername(req.getRemoteUser());
         Album a = albumService.findAlbumByAlbumName(albumName);
         model.addAttribute("tracks", albumService.displayAllTracks(u, a));
+        return "tracks";
+    }
+
+    @RequestMapping(value = "/listtracks", method = RequestMethod.GET)
+    public String displayListTracks(Model model, HttpServletRequest req, @RequestParam("playlistId") String playlistId) throws Exception {
+        User u = userService.findByUsername(req.getRemoteUser());
+        TrackList t = albumService.findTrackListByPlayListId(playlistId);
+        model.addAttribute("tracks", albumService.displayAllTracksForList(u, t));
         return "tracks";
     }
 
@@ -48,10 +64,25 @@ public class AppController {
         return "hello";
     }
 
+    @RequestMapping(value= "/tracks/move/{id}", method = RequestMethod.GET)
+    public String moveTrack(@PathVariable("id") Integer trackId, ModelMap model) {
+        model.put("track", albumService.findTrackById(trackId));
+        return "move";
+    }
+
     @RequestMapping(value="/track",method=RequestMethod.POST)
     public String saveEditedTrack(@ModelAttribute("track") Track editedTrack, BindingResult result, ModelMap model)
     {
         albumService.saveTrack(editedTrack);
         return "tracks";
+    }
+
+    @RequestMapping(value = "/move", method = RequestMethod.POST)
+    public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList,
+                         BindingResult result, ModelMap model) {
+        TrackList tl = albumService.findTrackListByPlaylistName(trackList);
+        Track t = albumService.findTrackById(track.getId());
+        albumService.moveTrackTo(t, tl);
+        return "hello";
     }
 }

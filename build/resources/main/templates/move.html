@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Title</title>
+</head>
+<body>
+<form ACTION="#" th:action="@{/move}" th:object="${track}" method="POST">
+    <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{trackId}"/>
+    <input type="hidden" th:field="*{name}"/>
+    <label> Move to:<input type="text" name="trackList"/></label>
+    <button type="submit">MOVE</button>
+</form>
+</body>
+</html>
