@@ -79,6 +79,18 @@ public class AppController {
         return "hello";
     }
 
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String registerUser(Model model, HttpServletRequest req) throws Exception {
+        return "register";
+    }
+
+    @RequestMapping(value="/register",method=RequestMethod.POST)
+    public String register(@ModelAttribute("user") User user, BindingResult result, ModelMap model)
+    {
+        userService.save(user);
+        return "login";
+    }
+
     @RequestMapping(value = "/move", method = RequestMethod.POST)
     public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList,
                               BindingResult result, ModelMap model, @RequestParam(name = "playlistId") String playlistId) {
