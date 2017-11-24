@@ -49,13 +49,14 @@ public class AppController {
         User u = userService.findByUsername(req.getRemoteUser());
         TrackList t = albumService.findTrackListById(Long.parseLong(playlistId));
         model.addAttribute("tracks", albumService.displayAllTracksForList(u, t));
+        model.addAttribute("playlistId", playlistId);
         return "tracks";
     }
 
     @RequestMapping(value= "/tracks/edit/{id}", method = RequestMethod.GET)
     public String editTrack(@PathVariable("id") Integer trackId, ModelMap model) {
         model.put("track", albumService.findTrackById(trackId));
-        return "hello";
+        return "edit";
     }
 
     @RequestMapping(value= "/tracks/delete/{id}", method = RequestMethod.GET)
@@ -64,9 +65,10 @@ public class AppController {
         return "hello";
     }
 
-    @RequestMapping(value= "/tracks/move/{id}", method = RequestMethod.GET)
-    public String moveTrack(@PathVariable("id") Integer trackId, ModelMap model) {
+    @RequestMapping(value= "/tracks/{id}/move/{playlistId}", method = RequestMethod.GET)
+    public String moveTrack(@PathVariable("id") Integer trackId, ModelMap model, @PathVariable("playlistId") String playlistId) {
         model.put("track", albumService.findTrackById(trackId));
+        model.addAttribute("playlistId", playlistId);
         return "move";
     }
 
@@ -74,13 +76,13 @@ public class AppController {
     public String saveEditedTrack(@ModelAttribute("track") Track editedTrack, BindingResult result, ModelMap model)
     {
         albumService.saveTrack(editedTrack);
-        return "tracks";
+        return "hello";
     }
 
     @RequestMapping(value = "/move", method = RequestMethod.POST)
-    public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList ,
-                              @RequestParam(name = "oldtrackList") String oldtrackList, BindingResult result, ModelMap model) {
-        TrackList oldtl = albumService.findTrackListByPlaylistName(oldtrackList);
+    public String moveTrackTo(@ModelAttribute("track") Track track, @RequestParam(name = "trackList") String trackList,
+                              BindingResult result, ModelMap model, @RequestParam(name = "playlistId") String playlistId) {
+        TrackList oldtl = albumService.findTrackListById(Long.valueOf(playlistId));
         TrackList tl = albumService.findTrackListByPlaylistName(trackList);
         Track t = albumService.findTrackById(track.getId());
         albumService.moveTrackTo(oldtl, t, tl);
