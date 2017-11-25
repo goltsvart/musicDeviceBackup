@@ -1,5 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Hello World!</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+	<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
 <body>
+<div class="jumbotron text-center">
+	<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+	<form th:action="@{/logout}" method="post" class="btn pull-right">
+		<input type="submit" value="Sign Out"/>
+	</form>
+</div>
 
 	<div th:if="${message}">
 		<h2 th:text="${message}"/>
@@ -8,7 +19,6 @@
 	<div>
 		<form method="POST" enctype="multipart/form-data" action="/uploadForm">
 			<table>
-				<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 				<input type="hidden" name="userName" th:value="${#httpServletRequest.remoteUser}"/>
 				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
 				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>

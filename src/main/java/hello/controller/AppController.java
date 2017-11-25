@@ -41,7 +41,7 @@ public class AppController {
         User u = userService.findByUsername(req.getRemoteUser());
         Album a = albumService.findAlbumByAlbumName(albumName);
         model.addAttribute("tracks", albumService.displayAllTracks(u, a));
-        return "tracks";
+        return "simpletracks";
     }
 
     @RequestMapping(value = "/listtracks", method = RequestMethod.GET)

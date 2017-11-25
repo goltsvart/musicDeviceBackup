@@ -2,10 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Music app</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<h1>Welcome!</h1>
-
-<p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
+<div class="container-fluid bg-2 text-center">
+    <h3>Where are you?</h3>
+    <p>This is music app. Simply apload your iTunes file and enjoy the music!</p>
+    <a th:href="@{/hello}" class="btn btn-default btn-lg">START</a>
+</div>
 </body>
 </html>

@@ -15,7 +15,7 @@
     <div><label> User Name : <input type="text" name="username"/> </label></div>
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <div><input type="submit" value="Sign In"/></div>
+    <div><input type="submit" value="Login"/></div>
 </form>
 <div><p>Not registered?<a th:href="@{/register}">click</a> to register.</p></div>
 </body>

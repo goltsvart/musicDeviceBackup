@@ -3,9 +3,11 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Hello World!</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<table>
+<table class="table table-striped">
     <tr class="header">
         <td>Track id</td>
         <td>Name</td>
@@ -16,10 +18,9 @@
     <tr th:each="track : ${tracks}">
         <td th:text="${track.trackId}">Track Id</td>
         <td th:text="${track.name}">Name</td>
-        <td><a th:href="@{'/tracks/edit/' + ${track.id}}">edit</a></td>
-        <td><a th:href="@{'/tracks/delete/' + ${track.id}}">delete</a></td>
-        <!--<td><a th:href="@{'/tracks/move/' + ${track.id}}">move</a></td>-->
-        <td><a th:href="@{'/tracks/' + ${track.id} + '/move/' + ${playlistId}}">move</a></td>
+        <td><a th:href="@{'/tracks/edit/' + ${track.id}}" class="btn glyphicon glyphicon-edit">edit</a></td>
+        <td><a th:href="@{'/tracks/delete/' + ${track.id}}" class="btn glyphicon glyphicon-trash">delete</a></td>
+        <td><a th:href="@{'/tracks/' + ${track.id} + '/move/' + ${playlistId}}" class="btn glyphicon glyphicon-share">move</a></td>
     </tr>
 </table>
 </body>

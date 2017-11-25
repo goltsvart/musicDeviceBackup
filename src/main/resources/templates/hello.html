@@ -3,16 +3,33 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Hello World!</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<div class="jumbotron text-center">
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <form th:action="@{/logout}" method="post" class="btn pull-right">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
 
-<p>Click <a th:href="@{/uploadForm}">here</a> to upload file.</p>
-<p>Click <a th:href="@{/albums(username=${#httpServletRequest.remoteUser})}">here</a> to see albums.</p>
-<p>Click <a th:href="@{/lists(username=${#httpServletRequest.remoteUser})}">here</a> to see playlists.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Uploading</h3>
+            <p>Click <a th:href="@{/uploadForm}">here</a> to upload file.</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Albums</h3>
+            <p>Click <a th:href="@{/albums(username=${#httpServletRequest.remoteUser})}">here</a> to see albums.</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Playlists</h3>
+            <p>Click <a th:href="@{/lists(username=${#httpServletRequest.remoteUser})}">here</a> to see playlists.</p>
+        </div>
+    </div>
+</div>
 
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
 </body>
 </html>

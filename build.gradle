@@ -28,6 +28,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("com.h2database:h2")
+    compile('org.webjars:bootstrap:3.3.7-1')
     compile('mysql:mysql-connector-java')
     compile('org.apache.commons:commons-lang3:3.6')
     compileOnly('org.projectlombok:lombok')

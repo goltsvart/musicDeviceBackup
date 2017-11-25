@@ -3,9 +3,11 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Hello World!</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<table>
+<table class="table table-striped">
     <tr class="header">
         <td>Album</td>
         <td>Year</td>
@@ -18,7 +20,7 @@
         <td th:text="${album.year}">year</td>
         <td th:text="${album.artist}">artist</td>
         <td th:text="${album.genre}">genre</td>
-        <td><p><a th:href="@{/tracks(username=${#httpServletRequest.remoteUser}, albumName=${album.album})}">Tracks</a></p></td>
+        <td><p><a th:href="@{/tracks(username=${#httpServletRequest.remoteUser}, albumName=${album.album})}" class="btn glyphicon glyphicon-folder-open">Tracks</a></p></td>
     </tr>
 </table>
 </body>

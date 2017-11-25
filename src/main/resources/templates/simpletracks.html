@@ -9,14 +9,12 @@
 <body>
 <table class="table table-striped">
     <tr class="header">
-        <td>PlayList ID</td>
+        <td>Track id</td>
         <td>Name</td>
-        <td></td>
     </tr>
-    <tr th:each="trackList : ${trackLists}">
-        <td th:text="${trackList.playlistId}">PlayList ID</td>
-        <td th:text="${trackList.playlistName}">Name</td>
-        <td><p><a th:href="@{/listtracks(username=${#httpServletRequest.remoteUser}, playlistId=${trackList.id})}" class="btn glyphicon glyphicon-music"></a></p></td>
+    <tr th:each="track : ${tracks}">
+        <td th:text="${track.trackId}">Track Id</td>
+        <td th:text="${track.name}">Name</td>
     </tr>
 </table>
 </body>
